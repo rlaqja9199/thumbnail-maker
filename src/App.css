@@ -1,38 +1,129 @@
-.App {
-  text-align: center;
+* {
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  vertical-align: middle; 
+  outline: none; 
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+a { text-decoration: none; color: inherit; }
+li { list-style: none;}
+img { vertical-align : top; }
+body {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #2d2d2d;
   }
+  
+.App {
+  width: 100%;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#makeBox{
+  margin: 0 auto;
+  width: 55vw;
+  height: 100vh;
+  box-shadow: 0px 0px 20px #aaa;
+}
+.inner{
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  max-width: 800px;
+  margin: 0 auto;
+}
+#titleBox {
+  margin: 40px 0;
+}
+#title {
+  font-size: 48px;
+}
+#textBox{
+width: 100%;
+display: flex;
+justify-content: space-between;
+}
+#textBox input{
+  width: 32%;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #aaa;
+  text-align: center;
+}
+ul{
+  width: 100%;
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+ul:nth-child(4){
+  margin-top: 30px;
+}
+ul:nth-child(4)::before{
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #aaa;
+  top: -15px;
+}
+ul::after{
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #aaa;
+  bottom: -15px;
+}
+li{
+  width: 30%;
+  height: 40px;
+}
+li:first-child{
+  font-size: 16px;
+  color: #666;
+  line-height: 40px;
+}
+button {
+  width: 95%;
+  height: 100%;
+  background: #eee;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  color: #777;
+  font-size: 16px;
+  line-height: 40px;
+}
+#btnDiv{
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 10px;
+}
+#btnDiv button{
+  width: 30%;
+  height: 40px;
+  border-radius: 0;
+}
+#btnDiv button:last-child{
+  background-color: #aaa;
+  color: #fff;
+}
+button:hover{
+  background-color: #3b45ff;
+  color: #fff;
+  transition: 0.5s;
+}
+#btnDiv button:hover{
+  background-color: #3b45ff;
+  color: #fff;
+  transition: 0.5s;
 }
 
-.App-link {
-  color: #61dafb;
-}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+canvas{
+  width: 800px;
+  height: 400px;
+  margin-bottom: 40px;
 }
