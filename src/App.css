@@ -4,6 +4,7 @@
   box-sizing: border-box; 
   vertical-align: middle; 
   outline: none; 
+  height: 100%;
 }
 a { text-decoration: none; color: inherit; }
 li { list-style: none;}
@@ -13,20 +14,21 @@ body {
     line-height: 1.5;
     color: #2d2d2d;
   }
-  
 .App {
   width: 100%;
+  height: 950px;
 }
 #makeBox{
   margin: 0 auto;
-  width: 55vw;
-  height: 100vh;
+  width: 50vw;
+  height: 100%;
   box-shadow: 0px 0px 20px #aaa;
+  background: #fff;
 }
 .inner{
   display: flex;
   flex-direction: column;
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
 }
 #titleBox {
@@ -38,7 +40,7 @@ body {
 #textBox{
 width: 100%;
 display: flex;
-justify-content: space-between;
+justify-content: center;
 }
 #textBox input{
   width: 32%;
@@ -46,6 +48,7 @@ justify-content: space-between;
   border-radius: 10px;
   border: 1px solid #aaa;
   text-align: center;
+  margin: 0 8px;
 }
 ul{
   width: 100%;
@@ -99,7 +102,7 @@ button {
   display: flex;
   justify-content: space-evenly;
   width: 100%;
-  margin-top: 10px;
+  margin: 14px 0;
 }
 #btnDiv button{
   width: 30%;
@@ -123,7 +126,5 @@ button:hover{
 
 
 canvas{
-  width: 800px;
-  height: 400px;
   margin-bottom: 40px;
 }
