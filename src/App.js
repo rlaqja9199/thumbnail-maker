@@ -6,9 +6,12 @@ function App() {
   const [bgColor, setBgColor] = useState();
   const [bgType, setBgType] = useState(1);
   const [thumbType, setThumbType] = useState("1");
-  const [title, setTitle] = useState("");
-  const [subTitle,setSubTitle] = useState("");
-  const [tag, setTag] = useState("");
+  const [title, setTitle] = useState("제목을 입력하세요.");
+  const [subTitle,setSubTitle] = useState("부제목을 입력하세요.");
+  const [tag, setTag] = useState("태그를 입력하세요.");
+  const [fontColor, setFontColor] = useState("#fff");
+  const [textShadow, setTextShadow] = useState("");
+  const [textSize, setTextSize] = useState("1");
   const gradientList = [
   "linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)",
   "linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%)",
@@ -65,6 +68,8 @@ function App() {
     "#3B9AE1",
     "#FEC260",
   ]
+
+  //썸네일 타입 버튼
   const typeThumbNail = (e)=>{
     setThumbType(
       e.target.value ==="1"? "1" : (e.target.value === "2"? "2" : "3")
@@ -72,6 +77,42 @@ function App() {
     console.log(thumbType);
     console.log(e.target.value)
   }
+
+  //텍스트 스타일 버튼
+  const textStyle = (e)=>{
+    console.log(e.target)
+    //버튼 색상변경
+    if(e.target.className === 'unselected'){
+      e.target.className = 'selected'
+    }else{
+      e.target.className = 'unselected'
+    }
+    //텍스트 섀도우
+    if(e.target.value === "shadow"){
+      if(e.target.className === 'selected'){
+        setTextShadow("3px 3px 5px rgb(0,0,0,40%)")
+      }else{
+        setTextShadow("")
+      }
+    }
+    //텍스트 컬러
+    if(e.target.value === "color"){
+      if(e.target.className === 'selected'){
+        setFontColor("#333")
+      }else {
+        setFontColor("#fff")
+      }
+    }
+    //글자크기
+    if(e.target.value === "textSize"){
+      if(e.target.className === 'selected'){
+        setTextSize("0.85")
+      }else{
+        setTextSize("1");
+      }
+    }
+  }
+  //랜덤 그라디언트 버튼
   const randomGra = ()=>{
     setBgType(1);
     const ranNum = Math.random();
@@ -80,6 +121,7 @@ function App() {
     setBgColor(gradientList[graNo])
     console.log(bgType)
   }
+  //랜덤 컬러 버튼
   const randomColor = ()=>{
     setBgType(2);
     const ranNum = Math.random();
@@ -91,79 +133,113 @@ function App() {
   const urlImg = ()=>{
     setBgType(3);
   }
-  useEffect(()=>{
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d',{preserveDrawingBuffer: true});
-    const width = 800;
-    const height = 400;
-    const saveBtn = document.getElementById("saveBtn");
-    const onSaveClick = ()=>{
-      //배경이미지 나타내지않는 문제 발생
-      const url = canvas.toDataURL();
-      const a = document.createElement("a")
-      a.href = url;
-      a.download = "download.png"
-      a.click();
-      console.log(canvas.toDataURL());
+  
+  //인풋 값 받아와서 썸네일에 넣어주기
+  const onChageText = (e)=>{
+    console.log(e.target.id)
+    if(e.target.id==="titleInput"){
+      if(!e.target.value){
+        setTitle("제목을 입력하세요.")
+      }else{
+        setTitle(e.target.value)
+      }
+    }else if(e.target.id==="subTitleInput"){
+      if(!e.target.value){
+        setSubTitle("부제목을 입력하세요.")
+      }else{
+        setSubTitle(e.target.value)
+      }
+    }else if(e.target.id==="tagInput"){
+      if(!e.target.value){
+        setTag("태그를 입력하세요.")
+      }else{
+        setTag(e.target.value)
+      }
     }
-    saveBtn.addEventListener("click",onSaveClick);
-    // const gradient = context.createLinearGradient(0,0,400,200);
-    // gradient.addColorStop(0, '#ff9a9e');
-    // gradient.addColorStop(1, "#fad0c4");
-    // context.fillStyle = gradient;
-    // context.fillRect(0,0,width,height)
-    
-    // context.font = "60px gothic";
-    // context.textAlign = "center"
-    // context.textBaseline = "middle"
-    // context.fillText(`야메때`,400,150)
+  }
+  //초기화 버튼
+  const resetBtn = (e)=>{
+    setTitle("제목을 입력하세요.");
+    setSubTitle("부제목을 입력하세요.");
+    setTag("태그를 입력하세요.");
+    randomGra()
+    typeThumbNail(e)
+  }
+
+  useEffect(()=>{
+    // const canvas = canvasRef.current;
+    // const context = canvas.getContext('2d',{preserveDrawingBuffer: true});
+    // const width = 800;
+    // const height = 400;
+    // const saveBtn = document.getElementById("saveBtn");
+    // const onSaveClick = ()=>{
+    //   //배경이미지 나타내지않는 문제 발생
+    //   const url = canvas.toDataURL();
+    //   const a = document.createElement("a")
+    //   a.href = url;
+    //   a.download = "download.png"
+    //   a.click();
+    //   console.log(canvas.toDataURL());
+    // }
+    // saveBtn.addEventListener("click",onSaveClick);
     randomGra()
   },[])
 
   return (
     <div className="App" style={bgType===1? {backgroundImage:bgColor}: {backgroundColor:bgColor}}>
+      <form>
       <div id='makeBox'>
         <div className='inner'>
           <div id='titleBox'>
             <h1 id='title'>Beom's Thumbnail Maker</h1>
             <p>project by beom9199</p>
           </div>
-          <canvas width="800" height="400" style={bgType===1? {backgroundImage:bgColor}: {backgroundColor:bgColor}} id='canvasBox' ref={canvasRef}></canvas>
+          <div id='captureBox' style={bgType===1? {backgroundImage:bgColor}: {backgroundColor:bgColor}}>
+            <ul id='thumbnailText'>
+              <li id='thumbTitle' style={{color:fontColor, textShadow:textShadow, transform:`translate(-50%,-50%) scale(${textSize})`}} >{title}</li>
+              <li id='thumbSubTitle'  style={{display:thumbType==="1"? "block" : "none", color:fontColor, textShadow:textShadow, transform:`translate(-50%,-50%) scale(${textSize})`}}>
+                <div id='subLine' style={{background:fontColor}}></div>
+                {subTitle}
+              </li>
+              <li id='thumbTag'  style={{display:thumbType==="3"? "none" : "block", color:fontColor, textShadow:textShadow,  transform:`translateX(-50%) scale(${textSize})`}}>{tag}</li>
+            </ul>
+          </div>
           <div id='textBox'>
-            <input type="text" placeholder='제목을 입력하세요.' />
-            <input type="text" style={{display:thumbType==="1"? "block" : "none" }} placeholder='부제목을 입력하세요.' />
-            <input type="text" style={{display:thumbType==="3"? "none" : "block"}} placeholder='태그를 입력하세요' />
+            <input type="text" onChange={onChageText} id="titleInput" placeholder='제목을 입력하세요.' />
+            <input type="text" onChange={onChageText} id="subTitleInput" style={{display:thumbType==="1"? "block" : "none" }} placeholder='부제목을 입력하세요.' />
+            <input type="text" onChange={onChageText} id="tagInput" style={{display:thumbType==="3"? "none" : "block"}} placeholder='태그를 입력하세요' />
           </div>
           <ul id='thumbnailType'>
             <li>
               <h3 className='ulTitle'>썸네일 타입</h3>
             </li>
-            <li><button value="1" style={{background:thumbType==="1"? "#3b45ff" : "", color:thumbType==="1"? "#fff" : ""}} onClick={typeThumbNail}>제목/부제목/분류</button></li>
-            <li><button value="2" style={{background:thumbType==="2"? "#3b45ff" : "", color:thumbType==="2"? "#fff" : ""}} onClick={typeThumbNail}>제목/분류</button></li>
-            <li><button value="3" style={{background:thumbType==="3"? "#3b45ff" : "", color:thumbType==="3"? "#fff" : ""}} onClick={typeThumbNail}>제목</button></li>
+            <li><button type='button' value="1" style={{background:thumbType==="1"? "#3b45ff" : "", color:thumbType==="1"? "#fff" : ""}} onClick={typeThumbNail}>제목/부제목/분류</button></li>
+            <li><button type='button' value="2" style={{background:thumbType==="2"? "#3b45ff" : "", color:thumbType==="2"? "#fff" : ""}} onClick={typeThumbNail}>제목/분류</button></li>
+            <li><button type='button' value="3" style={{background:thumbType==="3"? "#3b45ff" : "", color:thumbType==="3"? "#fff" : ""}} onClick={typeThumbNail}>제목</button></li>
           </ul>
           <ul id='bgType'>
             <li>
               <h3 className='ulTitle'>배경 타입</h3>
             </li>
-            <li><button onClick={randomGra} style={{background:bgType===1? "#3b45ff" : "", color:bgType===1? "#fff" : ""}}>랜덤 그라디언트</button></li>
-            <li><button onClick={randomColor} style={{background:bgType===2? "#3b45ff" : "",  color:bgType===2? "#fff" : ""}}>랜덤 단색</button></li>
-            <li><button onClick={urlImg} style={{background:bgType===3? "#3b45ff" : "", color:bgType===3? "#fff" : ""}}>이미지 URL</button></li>
+            <li><button type='button' onClick={randomGra} style={{background:bgType===1? "#3b45ff" : "", color:bgType===1? "#fff" : ""}}>랜덤 그라디언트</button></li>
+            <li><button type='button' onClick={randomColor} style={{background:bgType===2? "#3b45ff" : "",  color:bgType===2? "#fff" : ""}}>랜덤 단색</button></li>
+            <li><button type='button' onClick={urlImg} style={{background:bgType===3? "#3b45ff" : "", color:bgType===3? "#fff" : ""}}>이미지 URL</button></li>
           </ul>
           <ul id='textType'>
             <li>
               <h3 className='ulTitle'>텍스트 스타일</h3>
             </li>
-            <li><button>텍스트 그림자</button></li>
-            <li><button>텍스트 색상 반전</button></li>
-            <li><button>제목 크기 작게</button></li>
+            <li><button type='button' value="shadow" className='unselected' onClick={textStyle}>텍스트 그림자</button></li>
+            <li><button type='button' value="color" className='unselected' onClick={textStyle}>텍스트 색상 반전</button></li>
+            <li><button type='button' value="textSize" className='unselected' onClick={textStyle}>제목 크기 작게</button></li>
           </ul>
           <div id='btnDiv'>
-            <button type='reset'>초기화</button>
-            <button id='saveBtn'>완료 및 이미지화</button>
+            <button value="1" type='reset' onClick={resetBtn}>초기화</button>
+            <button type='button' id='saveBtn'>완료 및 이미지화</button>
           </div>
         </div>
       </div>
+      </form>
     </div>
   );
 }

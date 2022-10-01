@@ -10,6 +10,7 @@ a { text-decoration: none; color: inherit; }
 li { list-style: none;}
 img { vertical-align : top; }
 body {
+  font-family: 'Noto Sans KR', sans-serif;
     font-size: 14px;
     line-height: 1.5;
     color: #2d2d2d;
@@ -125,6 +126,51 @@ button:hover{
 }
 
 
-canvas{
-  margin-bottom: 40px;
+#captureBox {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 30px;
+}
+#thumbnailText {
+  height: 400px;
+  position: relative;
+  text-align: center;
+}
+#thumbTitle{
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  font-size: 48px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -1px;
+}
+#thumbSubTitle{
+  width: auto;
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -1px;
+}
+#thumbSubTitle #subLine {
+  width: 100%;
+  height: 1px;
+}
+#thumbTag {
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -1px;
+}
+#textType .selected{
+  background: #3b45ff;
+  color: #fff;
 }
