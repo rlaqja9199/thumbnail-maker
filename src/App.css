@@ -18,13 +18,30 @@ body {
 .App {
   width: 100%;
   height: 950px;
+  /* filter: blur(5px); */
+}
+#background {
+  position: absolute;
+  width: 100%;
+  height: 950px;
+  left: 0;
+  top: 0;
+}
+#background::after {
+  content: "";
+  position: absolute;;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(10px);
 }
 #makeBox{
+  position: relative;
   margin: 0 auto;
   width: 50vw;
-  height: 100%;
+  height: 950px;
   box-shadow: 0px 0px 20px #aaa;
   background: #fff;
+  filter: none;
 }
 .inner{
   display: flex;
@@ -130,11 +147,13 @@ button:hover{
   width: 100%;
   height: 400px;
   margin-bottom: 30px;
+  /* overflow: hidden; */
 }
 #thumbnailText {
   height: 400px;
   position: relative;
   text-align: center;
+  overflow: hidden;
 }
 #thumbTitle{
   width: 100%;
@@ -145,9 +164,11 @@ button:hover{
   font-weight: 600;
   color: #fff;
   letter-spacing: -1px;
+  white-space: nowrap;
 }
 #thumbSubTitle{
   width: auto;
+  min-width: 0;
   position: absolute;
   left: 50%;
   top: 60%;
@@ -155,6 +176,7 @@ button:hover{
   font-weight: 600;
   color: #fff;
   letter-spacing: -1px;
+  white-space: nowrap;
 }
 #thumbSubTitle #subLine {
   width: 100%;
@@ -169,6 +191,7 @@ button:hover{
   font-weight: 600;
   color: #fff;
   letter-spacing: -1px;
+  white-space: nowrap;
 }
 #textType .selected{
   background: #3b45ff;

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import domtoimage from 'dom-to-image';
+import { saveAs } from 'file-saver';
 import './App.css';
 
 function App() {
@@ -12,6 +14,9 @@ function App() {
   const [fontColor, setFontColor] = useState("#fff");
   const [textShadow, setTextShadow] = useState("");
   const [textSize, setTextSize] = useState("1");
+  const textStyle1 = useRef();
+  const textStyle2 = useRef();
+  const textStyle3 = useRef();
   const gradientList = [
   "linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)",
   "linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%)",
@@ -131,10 +136,15 @@ function App() {
     console.log(bgType)
   }
   const urlImg = ()=>{
-    setBgType(3);
+    const url = window.prompt("URL을 입력해주세요");
+    console.log(url)
+    if(url){
+      setBgColor(url)
+      setBgType(3);
+    }
   }
   
-  //인풋 값 받아와서 썸네일에 넣어주기
+  //인풋 값 받아와서 썸네일텍스트에 넣어주기
   const onChageText = (e)=>{
     console.log(e.target.id)
     if(e.target.id==="titleInput"){
@@ -157,13 +167,31 @@ function App() {
       }
     }
   }
+  //저장 버튼
+  const onDownloadBtn = ()=>{
+    domtoimage
+    .toBlob(document.querySelector("#captureBox"))
+    .then((blob)=>{
+      const saveConfirm = window.confirm("썸네일을 저장하시겠습니까?")
+      if(saveConfirm === true){
+        saveAs(blob, 'download.jpg');
+      }
+
+    })
+  }
   //초기화 버튼
   const resetBtn = (e)=>{
+    randomGra();
     setTitle("제목을 입력하세요.");
     setSubTitle("부제목을 입력하세요.");
     setTag("태그를 입력하세요.");
-    randomGra()
-    typeThumbNail(e)
+    typeThumbNail(e);
+    setTextShadow("");
+    setFontColor("#fff");
+    setTextSize("1");
+    textStyle1.current.className = 'unselected'
+    textStyle2.current.className = 'unselected'
+    textStyle3.current.className = 'unselected'
   }
 
   useEffect(()=>{
@@ -186,59 +214,71 @@ function App() {
   },[])
 
   return (
-    <div className="App" style={bgType===1? {backgroundImage:bgColor}: {backgroundColor:bgColor}}>
+    // <div className="App" style={bgType===1? {background:bgColor}: {background:bgColor}}></div>
+    <div className="App">
       <form>
-      <div id='makeBox'>
-        <div className='inner'>
-          <div id='titleBox'>
-            <h1 id='title'>Beom's Thumbnail Maker</h1>
-            <p>project by beom9199</p>
-          </div>
-          <div id='captureBox' style={bgType===1? {backgroundImage:bgColor}: {backgroundColor:bgColor}}>
-            <ul id='thumbnailText'>
-              <li id='thumbTitle' style={{color:fontColor, textShadow:textShadow, transform:`translate(-50%,-50%) scale(${textSize})`}} >{title}</li>
-              <li id='thumbSubTitle'  style={{display:thumbType==="1"? "block" : "none", color:fontColor, textShadow:textShadow, transform:`translate(-50%,-50%) scale(${textSize})`}}>
-                <div id='subLine' style={{background:fontColor}}></div>
-                {subTitle}
+        <div id='background' style={
+          bgType === 1 ? {background:bgColor} : 
+          (bgType === 2 ? {background:bgColor} :
+            {background:`url(${bgColor}) no-repeat center center/cover`}
+          )
+          }></div>
+        <div id='makeBox'>
+          <div className='inner'>
+            <div id='titleBox'>
+              <h1 id='title'>Beom's Thumbnail Maker</h1>
+              <p>project by beom9199</p>
+            </div>
+            <div id='captureBox' style={
+              bgType === 1 ? {background:bgColor} : 
+              (bgType === 2 ? {background:bgColor} :
+                {background:`url(${bgColor}) no-repeat center center/cover`}
+              )
+            }>
+              <ul id='thumbnailText'>
+                <li id='thumbTitle' style={{color:fontColor, textShadow:textShadow, transform:`translate(-50%,-50%) scale(${textSize})`}} >{title}</li>
+                <li id='thumbSubTitle'  style={{display:thumbType==="1"? "block" : "none", color:fontColor, textShadow:textShadow, transform:`translate(-50%,-50%) scale(${textSize})`}}>
+                  <div id='subLine' style={{background:fontColor}}></div>
+                  {subTitle}
+                </li>
+                <li id='thumbTag'  style={{display:thumbType==="3"? "none" : "block", color:fontColor, textShadow:textShadow,  transform:`translateX(-50%) scale(${textSize})`}}>{tag}</li>
+              </ul>
+            </div>
+            <div id='textBox'>
+              <input type="text" onChange={onChageText} id="titleInput" placeholder='제목을 입력하세요.' />
+              <input type="text" onChange={onChageText} id="subTitleInput" style={{display:thumbType==="1"? "block" : "none" }} placeholder='부제목을 입력하세요.' />
+              <input type="text" onChange={onChageText} id="tagInput" style={{display:thumbType==="3"? "none" : "block"}} placeholder='태그를 입력하세요' />
+            </div>
+            <ul id='thumbnailType'>
+              <li>
+                <h3 className='ulTitle'>썸네일 타입</h3>
               </li>
-              <li id='thumbTag'  style={{display:thumbType==="3"? "none" : "block", color:fontColor, textShadow:textShadow,  transform:`translateX(-50%) scale(${textSize})`}}>{tag}</li>
+              <li><button type='button' value="1" style={{background:thumbType==="1"? "#3b45ff" : "", color:thumbType==="1"? "#fff" : ""}} onClick={typeThumbNail}>제목/부제목/분류</button></li>
+              <li><button type='button' value="2" style={{background:thumbType==="2"? "#3b45ff" : "", color:thumbType==="2"? "#fff" : ""}} onClick={typeThumbNail}>제목/분류</button></li>
+              <li><button type='button' value="3" style={{background:thumbType==="3"? "#3b45ff" : "", color:thumbType==="3"? "#fff" : ""}} onClick={typeThumbNail}>제목</button></li>
             </ul>
-          </div>
-          <div id='textBox'>
-            <input type="text" onChange={onChageText} id="titleInput" placeholder='제목을 입력하세요.' />
-            <input type="text" onChange={onChageText} id="subTitleInput" style={{display:thumbType==="1"? "block" : "none" }} placeholder='부제목을 입력하세요.' />
-            <input type="text" onChange={onChageText} id="tagInput" style={{display:thumbType==="3"? "none" : "block"}} placeholder='태그를 입력하세요' />
-          </div>
-          <ul id='thumbnailType'>
-            <li>
-              <h3 className='ulTitle'>썸네일 타입</h3>
-            </li>
-            <li><button type='button' value="1" style={{background:thumbType==="1"? "#3b45ff" : "", color:thumbType==="1"? "#fff" : ""}} onClick={typeThumbNail}>제목/부제목/분류</button></li>
-            <li><button type='button' value="2" style={{background:thumbType==="2"? "#3b45ff" : "", color:thumbType==="2"? "#fff" : ""}} onClick={typeThumbNail}>제목/분류</button></li>
-            <li><button type='button' value="3" style={{background:thumbType==="3"? "#3b45ff" : "", color:thumbType==="3"? "#fff" : ""}} onClick={typeThumbNail}>제목</button></li>
-          </ul>
-          <ul id='bgType'>
-            <li>
-              <h3 className='ulTitle'>배경 타입</h3>
-            </li>
-            <li><button type='button' onClick={randomGra} style={{background:bgType===1? "#3b45ff" : "", color:bgType===1? "#fff" : ""}}>랜덤 그라디언트</button></li>
-            <li><button type='button' onClick={randomColor} style={{background:bgType===2? "#3b45ff" : "",  color:bgType===2? "#fff" : ""}}>랜덤 단색</button></li>
-            <li><button type='button' onClick={urlImg} style={{background:bgType===3? "#3b45ff" : "", color:bgType===3? "#fff" : ""}}>이미지 URL</button></li>
-          </ul>
-          <ul id='textType'>
-            <li>
-              <h3 className='ulTitle'>텍스트 스타일</h3>
-            </li>
-            <li><button type='button' value="shadow" className='unselected' onClick={textStyle}>텍스트 그림자</button></li>
-            <li><button type='button' value="color" className='unselected' onClick={textStyle}>텍스트 색상 반전</button></li>
-            <li><button type='button' value="textSize" className='unselected' onClick={textStyle}>제목 크기 작게</button></li>
-          </ul>
-          <div id='btnDiv'>
-            <button value="1" type='reset' onClick={resetBtn}>초기화</button>
-            <button type='button' id='saveBtn'>완료 및 이미지화</button>
+            <ul id='bgType'>
+              <li>
+                <h3 className='ulTitle'>배경 타입</h3>
+              </li>
+              <li><button type='button' onClick={randomGra} style={{background:bgType===1? "#3b45ff" : "", color:bgType===1? "#fff" : ""}}>랜덤 그라디언트</button></li>
+              <li><button type='button' onClick={randomColor} style={{background:bgType===2? "#3b45ff" : "",  color:bgType===2? "#fff" : ""}}>랜덤 단색</button></li>
+              <li><button type='button' onClick={urlImg} style={{background:bgType===3? "#3b45ff" : "", color:bgType===3? "#fff" : ""}}>이미지 URL</button></li>
+            </ul>
+            <ul id='textType'>
+              <li>
+                <h3 className='ulTitle'>텍스트 스타일</h3>
+              </li>
+              <li><button type='button' value="shadow" ref={textStyle1} className='unselected' onClick={textStyle}>텍스트 그림자</button></li>
+              <li><button type='button' value="color" ref={textStyle2} className='unselected' onClick={textStyle}>텍스트 색상 반전</button></li>
+              <li><button type='button' value="textSize" ref={textStyle3} className='unselected' onClick={textStyle}>제목 크기 작게</button></li>
+            </ul>
+            <div id='btnDiv'>
+              <button value="1" type='reset' onClick={resetBtn}>초기화</button>
+              <button type='button' id='saveBtn' onClick={onDownloadBtn}>완료 및 이미지화</button>
+            </div>
           </div>
         </div>
-      </div>
       </form>
     </div>
   );
