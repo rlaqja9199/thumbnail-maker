@@ -174,7 +174,7 @@ function App() {
     .then((blob)=>{
       const saveConfirm = window.confirm("썸네일을 저장하시겠습니까?")
       if(saveConfirm === true){
-        saveAs(blob, 'download.jpg');
+        saveAs(blob, 'download.png');
       }
 
     })
